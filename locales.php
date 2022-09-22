@@ -17,8 +17,8 @@
  *   http://localhost:3000/locales.php?code=en_US
  *   http://localhost:3000/locales.php?language=English
  *   http://localhost:3000/locales.php?script=Latin
- *   http://localhost:3000/locales.php?random
- *   http://localhost:3000/locales.php?random&totalResult=100&limit=25
+ *   http://localhost:3000/locales.php?random=true
+ *   http://localhost:3000/locales.php?random=true&totalResult=100&limit=25
  *   http://localhost:3000/locales.php?sortBy=language:descending
  *   http://localhost:3000/locales.php?sortBy=language:ascending
  *
@@ -56,7 +56,7 @@ function get_locales() {
         });
     }
 
-    if (isset($_GET['random'])) {
+    if (boolval($_GET['random'] ?? false)) {
         shuffle($locales);
     } else if (isset($_GET['sortBy'])) {
         [$field, $direction] = explode(':', $_GET['sortBy']);
