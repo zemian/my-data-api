@@ -5,13 +5,12 @@
  * @author Zemian Deng <zemiandeng@gmail.com>
  */
 
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+
 if (isset($_GET['testError'])) {
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Origin: *');
     header('HTTP/1.1 500 Internal Server Error');
 } else {
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Origin: *');
     $data = $_GET;
     if (count($data) === 0) {
         $data = ['status' => "API is working!", 'timestamp' => date('c')];

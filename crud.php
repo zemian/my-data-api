@@ -14,14 +14,14 @@
  *
  * @author Zemian Deng <zemiandeng@gmail.com>
  */
-namespace Tqdev\PhpCrudApi;
+
+require_once 'api.include.php';
 
 use Tqdev\PhpCrudApi\Api;
 use Tqdev\PhpCrudApi\Config;
 use Tqdev\PhpCrudApi\RequestFactory;
 use Tqdev\PhpCrudApi\ResponseUtils;
 
-require_once 'api.include.php';
 $config = new Config([
     'debug' => true,
     'driver' => 'sqlite',

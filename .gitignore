@@ -3,3 +3,4 @@ crud.db
 
 # Ignore any test data
 data/test/
+tmp/

@@ -19,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt) {
                 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
-                $data = $pdo->errorInfo();
+                $data = ["error" => $pdo->errorInfo()];
             }
             $execute_result = json_encode($data, JSON_PRETTY_PRINT);
         }
     } catch (Exception | Error $e) {
-        $execute_result = $e;
+        $data = ["error" => $e];
     }
 }
 ?>
