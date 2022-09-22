@@ -14,7 +14,10 @@ function create_data() {
 
     $drop_table = boolval($_GET['drop_table'] ?? 'false');
     if ($drop_table) {
-        $pdo->exec("DROP TABLE locales");
+        $data["drop_table"] = $pdo->exec("DROP TABLE locales");
+        if (!$data['drop_table']) {
+            return ["error" => "Failed to drop table locales"];
+        }
     }
 
     $stmt = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='locales'");
@@ -44,22 +47,18 @@ function create_data() {
             );
             $result = $stmt->execute(array_values($locales));
             if (false === $result) {
-                return ["error" => "Failed to insert table."];
+                return ["error" => "Failed to insert data row.", "data_row" => $locales];
             }
         }
 
-        $data = ['success' => "Table 'locales' created!",
-            'timestamp' => date('c'),
-            'reset' => $is_reset
-        ];
+        $data = ['success' => "Data loaded into table locales."];
     } else {
         $stmt = $pdo->query("SELECT COUNT(*) as count FROM locales");
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $data = ['error' => "Table 'locales' already exists!",
-            'timestamp' => date('c'),
-            'count' => $result['count']
-        ];
+        return ['error' => "Table 'locales' already exists!", "count" => $result['count'];
     }
+
+    $data['timestamp'] => date('c');
     return $data;
 }
 
