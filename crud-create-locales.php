@@ -1,6 +1,6 @@
 <?php
 /*
- * A script to insert all the locales object found in built-in PHP into the
+ * An API to insert all the locales object found in built-in PHP into the
  * crud.db DB.
  *
  * @author Zemian Deng <zemiandeng@gmail.com>
@@ -26,6 +26,9 @@ function create_data() {
             );
             HERE
         );
+        if (false === $result) {
+            return ["error" => "Failed to create table."];
+        }
 
         $stmt = $pdo->prepare('INSERT INTO locales(code, language, region, script) VALUES(?, ?, ?, ?)');
         $locale_codes = ResourceBundle::getLocales('');
@@ -37,16 +40,19 @@ function create_data() {
                 "script" => Locale::getDisplayScript($code)
             );
             $result = $stmt->execute(array_values($locales));
+            if (false === $result) {
+                return ["error" => "Failed to insert table."];
+            }
         }
 
-        $data = ['message' => "Table 'locales' created!",
+        $data = ['success' => "Table 'locales' created!",
             'timestamp' => date('c'),
             'reset' => $is_reset
         ];
     } else {
         $stmt = $pdo->query("SELECT COUNT(*) as count FROM locales");
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $data = ['message' => "Table 'locales' already exists!",
+        $data = ['error' => "Table 'locales' already exists!",
             'timestamp' => date('c'),
             'count' => $result['count']
         ];
