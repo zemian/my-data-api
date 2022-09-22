@@ -21,8 +21,8 @@ function create_data() {
     }
 
     $stmt = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='locales'");
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (false === $data) {
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (false === $result) {
         $result = $pdo->exec(<<<HERE
             CREATE TABLE locales (
                 code TEXT primary key,
