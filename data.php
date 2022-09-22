@@ -1,6 +1,13 @@
 <?php
 /**
- * A simple API that will fetch static data file from a directory.\
+ * A simple API that will fetch static data file from a directory.
+ *
+ * Example usage:
+ *   data.php?file=states.json
+ * 
+ *   # Will load a file as HTTP specific code
+ *   data.php?error_file=my-error.json&status_code=500&status_msg=Just a test
+ *
  * 
  * @author Zemian Deng <zemiandeng@gmail.com>
  */

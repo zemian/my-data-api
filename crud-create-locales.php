@@ -2,6 +2,9 @@
 /*
  * An API to insert all the locales object found in built-in PHP into the
  * crud.db DB.
+ * 
+ * Example usage:
+ *   crud-create-locales.php?drop_table=true
  *
  * @author Zemian Deng <zemiandeng@gmail.com>
  */
@@ -9,8 +12,8 @@
 function create_data() {
     $pdo = new PDO('sqlite:crud.db');
 
-    $is_reset = isset($_GET['reset']);
-    if ($is_reset) {
+    $drop_table = boolval($_GET['drop_table'] ?? 'false');
+    if ($drop_table) {
         $pdo->exec("DROP TABLE locales");
     }
 

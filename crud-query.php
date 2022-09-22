@@ -2,6 +2,9 @@
 /*
  * A simple SQL query API to crud db.
  *
+ * Example usage: 
+ *   crud-query.php?sql=select * from locales // Or you may do a POST method
+ *
  * @author Zemian Deng <zemiandeng@gmail.com>
  */
 function get_data() {

@@ -1,6 +1,8 @@
 <?php
 /*
  * A simple web page to manipulate the crud.db database.
+ * 
+ * The UI form provide action to Query a SQL or Execute one or more SQL statements.
  *
  * @author Zemian Deng <zemiandeng@gmail.com>
  */
