@@ -1,3 +1,5 @@
+.idea/
+
 # We do not want to save the DB into git repo
 crud.db
 
