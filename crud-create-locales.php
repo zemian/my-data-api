@@ -12,17 +12,17 @@
 function create_data() {
     $pdo = new PDO('sqlite:crud.db');
 
-    $drop_table = boolval($_GET['drop_table'] ?? 'false');
+    $drop_table = boolval($_GET['drop_table'] ?? false);
     if ($drop_table) {
         $data["drop_table"] = $pdo->exec("DROP TABLE locales");
-        if (!$data['drop_table']) {
+        if (false === $data['drop_table']) {
             return ["error" => "Failed to drop table locales"];
         }
     }
 
     $stmt = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='locales'");
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($data === false) {
+    if (false === $data) {
         $result = $pdo->exec(<<<HERE
             CREATE TABLE locales (
                 code TEXT primary key,
@@ -55,10 +55,10 @@ function create_data() {
     } else {
         $stmt = $pdo->query("SELECT COUNT(*) as count FROM locales");
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return ['error' => "Table 'locales' already exists!", "count" => $result['count'];
+        return ['error' => "Table 'locales' already exists!", "count" => $result['count']];
     }
 
-    $data['timestamp'] => date('c');
+    $data['timestamp'] = date('c');
     return $data;
 }
 
