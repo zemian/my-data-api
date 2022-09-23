@@ -22,7 +22,6 @@
  *   http://localhost:3000/locales.php?sortBy=language:descending
  *   http://localhost:3000/locales.php?sortBy=language:ascending
  *
- * Source: https://gist.github.com/zemian/8a04fa2d11542654e5262f46f341c1ef
  * Author: Zemian Deng <zemiandneg@gmail.com>
  */
 
@@ -38,19 +37,19 @@ function get_locales() {
         );
     }
 
-    if (isset($_GET['code'])) {
+    if ($_GET['code'] ?? '') {
         $locales = array_filter($locales, function ($e) {
            return strstr($e['code'], $_GET['code']);
         });
-    } else if (isset($_GET['language'])) {
+    } else if ($_GET['language'] ?? '') {
         $locales = array_filter($locales, function ($e) {
             return strstr($e['language'], $_GET['language']);
         });
-    } else if (isset($_GET['region'])) {
+    } else if ($_GET['region'] ?? '') {
             $locales = array_filter($locales, function ($e) {
              return strstr($e['region'], $_GET['region']);
             });
-    } else if (isset($_GET['script'])) {
+    } else if ($_GET['script'] ?? '') {
         $locales = array_filter($locales, function ($e) {
          return strstr($e['script'], $_GET['script']);
         });
@@ -58,7 +57,7 @@ function get_locales() {
 
     if (boolval($_GET['random'] ?? false)) {
         shuffle($locales);
-    } else if (isset($_GET['sortBy'])) {
+    } else if ($_GET['sortBy'] ?? '') {
         [$field, $direction] = explode(':', $_GET['sortBy']);
         usort($locales, function($a, $b) use ($field, $direction) {
             if ($direction === 'ascending') {
@@ -68,7 +67,7 @@ function get_locales() {
         });
     }
 
-    if (isset($_GET['totalResult'])) {
+    if (isset($_GET['totalResult']) && $_GET['totalResult'] !== '') {
         // Chop off data to simulate less data than it provide
         $locales = array_slice($locales, 0, $_GET['totalResult']);
     }
