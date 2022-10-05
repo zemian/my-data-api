@@ -83,7 +83,7 @@
                     const url = `https://api.esv.org/v3/passage/search/?q=${this.searchText}&page=${currentPage}`;
                     const options = {
                         headers: {
-                            Authorization: 'Token ' + apiKeyData.token
+                            Authorization: 'Token ' + apiKeyData.ESV.apiKey
                         }
                     };
                     fetch(url, options)
@@ -96,8 +96,7 @@
             }
         },
         created: function () {
-            // You must provide a API key from https://api.esv.org/
-            // saved in "api-key.json" file as {"token": "<api-key>"} object.
+            // You must provide a API key from https://api.esv.org/ saved in "api-key.json" file.
             this.apiKeyDataPromise = new Promise(resolve => {
                 fetch('api-key.json')
                     .then(resp => resp.json())

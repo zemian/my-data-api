@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lookup Bible Passages</title>
+
+    <link href="https://unpkg.com/bulma@0.9.4/css/bulma.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3.2.40/dist/vue.global.prod.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <div class="hero is-primary">
+        <div class="hero-body">
+            <h1 class="title">Lookup Bible Passages</h1>
+            <p class="subtitle">Example: <code>Rom 3:11, 10:9, Jn 3:16, Ps 23, Phil 4:4</code></p>
+            <div class="field has-addons">
+                <div class="control is-expanded">
+                    <input class="input" v-model="searchText" @keyup.enter="search">
+                </div>
+                <div class="control">
+                    <a class="button is-info" @click="search">Search</a>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input class="radio" name="version" type="radio" value="ESV" v-model="version"> ESV
+                    <input class="radio" name="version" type="radio" value="NLT" v-model="version"> NLT
+                    <input class="radio" name="version" type="radio" value="KJV" v-model="version"> KJV
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section" v-if="searchResult">
+        <div class="container">
+            <div class="content">
+                <div v-if="version === 'ESV'">
+                    <ul v-if="searchResult.passages.length > 0">
+                        <li v-for="p in searchResult.passages" v-html="p"></li>
+                    </ul>
+                    <p v-else>No passages found!</p>
+                </div>
+                <div v-else>
+                    <div v-if="searchResult.result" v-html="searchResult.result"></div>
+                    <p v-else>No passages found!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>Powered by</span>: <a target="_target" href="https://api.esv.org/">ESV API</a>
+        and <a target="_target" href="https://api.nlt.to">NLT API</a>
+    </div>
+</div>
+<script>
+    const App = {
+        data: function () {
+            return {
+                version: 'NLT',
+                apiKeyDataPromise: null,
+                searchText: null,
+                searchResult: null
+            };
+        },
+        watch: {
+            version: function () {
+                if (this.searchText) {
+                    this.search();
+                } else {
+                    this.searchResult = null;
+                }
+            }
+        },
+        methods: {
+            search() {
+                if (!this.searchText) {
+                    this.searchResult = null;
+                    return;
+                }
+                if (this.searchText && this.searchResult) {
+                    this.searchResult = null;
+                }
+                if (this.version === 'ESV') {
+                    this.searchESV();
+                } else {
+                    this.searchNLT();
+                }
+            },
+
+            getAPIKeyDataPromise() {
+                if (!this.apiKeyDataPromise) {
+                    // You must provide a API key from https://api.esv.org/ saved in "api-key.json" file.
+                    this.apiKeyDataPromise = new Promise(resolve => {
+                        fetch('api-key.json')
+                            .then(resp => resp.json())
+                            .then(data => resolve(data));
+                    });
+                }
+                return this.apiKeyDataPromise;
+            },
+
+            searchNLT() {
+                // NOTE: NLT API actually supports multiple versions of Bible!
+                /*
+                NLT	    NLT (American English)
+                NLTUK	NLT (UK English)
+                NTV	    Nueva Traducción Viviente
+                KJV	    King James Version
+                 */
+                this.getAPIKeyDataPromise().then(apiKeyData => {
+                    let url = `https://api.nlt.to/api/passages?ref=${this.searchText}&version=${this.version}`;
+                    if (apiKeyData?.NLT?.apiKey) {
+                        url += `key=${apiKeyData.NLT.apiKey}`;
+                    }
+                    fetch(url)
+                        .then(resp => resp.text())
+                        .then(data => {
+                            this.searchResult = { result: data };
+                        });
+
+                });
+            },
+            searchESV() {
+                this.getAPIKeyDataPromise().then(apiKeyData => {
+                    const url = `https://api.esv.org/v3/passage/html/?q=${this.searchText}`;
+                    const options = {
+                        headers: {
+                            Authorization: 'Token ' + apiKeyData.ESV.apiKey
+                        }
+                    };
+                    fetch(url, options)
+                        .then(resp => resp.json())
+                        .then(data => {
+                            this.searchResult = data;
+                        });
+
+                });
+            }
+        },
+        created: function () {
+            if (this.searchText) {
+                this.search();
+            }
+        }
+    };
+    Vue.createApp(App).mount('#app');
+</script>
+
+</body>
+</html>
