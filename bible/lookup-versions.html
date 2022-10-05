@@ -112,7 +112,7 @@
                 this.getAPIKeyDataPromise().then(apiKeyData => {
                     let url = `https://api.nlt.to/api/passages?ref=${this.searchText}&version=${this.version}`;
                     if (apiKeyData?.NLT?.apiKey) {
-                        url += `key=${apiKeyData.NLT.apiKey}`;
+                        url += `&key=${apiKeyData.NLT.apiKey}`;
                     }
                     fetch(url)
                         .then(resp => resp.text())
