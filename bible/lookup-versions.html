@@ -25,8 +25,8 @@
             </div>
             <div class="field">
                 <div class="control">
-                    <input class="radio" name="version" type="radio" value="ESV" v-model="version"> ESV
                     <input class="radio" name="version" type="radio" value="NLT" v-model="version"> NLT
+                    <input class="radio" name="version" type="radio" value="ESV" v-model="version"> ESV
                     <input class="radio" name="version" type="radio" value="KJV" v-model="version"> KJV
                 </div>
             </div>
@@ -49,8 +49,9 @@
         </div>
     </div>
     <div class="footer">
-        <span>Powered by</span>: <a target="_target" href="https://api.esv.org/">ESV API</a>
-        and <a target="_target" href="https://api.nlt.to">NLT API</a>
+        <span>Powered by</span>:
+        <a target="_target" href="https://api.nlt.to">NLT API</a> and
+        <a target="_target" href="https://api.esv.org/">ESV API</a>
     </div>
 </div>
 <script>
